@@ -132,7 +132,15 @@
         font-family: "Courier New", Courier, monospace;
         color: rgb(255, 255, 255);
         text-shadow: 0 0 5px white;
-      }
+        transition: background-color 0.3s ease, color 0.3s ease;  /* Smooth transition */
+}
+
+button:hover {
+  background-color: #ffffff;  /* White background */
+  color: #000000;  /* Black text */
+  text-shadow: 0 0 5px #000000;
+}
+      
     </style>
   </head>
   <body>
@@ -179,12 +187,15 @@
         });
       }
 
+      let hasFinishedWriting = false;
       function writeToTerminal(terminal, text, index) {
+        if (hasFinishedWriting) return;
         if (index < text.length) {
           terminal.textContent += text[index];
           setTimeout(() => {
             writeToTerminal(terminal, text, index + 1);
           }, 100); // Consider increasing this delay as well
+          let hasFinishedWriting = true;
         }
       }
     </script>

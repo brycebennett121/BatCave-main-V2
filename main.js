@@ -190,7 +190,7 @@ const terminal = document.getElementById('terminal');
 const clock = new THREE.Clock();
 
 // 3D sphere as a clickable button
-const sphereGeometry = new THREE.SphereGeometry(1, 8, 8);
+const sphereGeometry = new THREE.SphereGeometry(0.15, 8, 8);
 const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff, opacity: 0, transparent: true });
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 sphere.position.set(0, -0.8, 0);
@@ -230,6 +230,17 @@ const moonLight = new THREE.PointLight(0xffffff, 40, 100000);  // color, intensi
 moonLight.position.set(-50, 20, -40); // set light position at the same position as the moon
 scene.add(moonLight);
 
+// Adding "Click Me!" button
+const clickMeButton = document.createElement("button");
+clickMeButton.innerHTML = "Click Me!";
+clickMeButton.style.position = "absolute";
+clickMeButton.style.top = "100px";
+clickMeButton.style.left = "100px";
+// Note the event is simply "click", not "Onmouseclick"
+clickMeButton.addEventListener("click", onMouseClick);
+
+document.body.appendChild(clickMeButton);
+
 var controls = new OrbitControls(camera, renderer.domElement);
 
 
@@ -265,25 +276,25 @@ function insertButtonsIntoTerminal(terminal) {
     `;
     terminal.innerHTML += buttonsHTML;
   
-    // Add event listeners to the buttons if needed
-    document.getElementById("about-button").addEventListener("click", function() {
-      console.log("About button clicked");
-      // You can display more information here or navigate to another page
-    });
-  
-    document.getElementById("projects-button").addEventListener("click", function() {
-      console.log("Projects button clicked");
-      // You can display more information here or navigate to another page
-    });
-  
-    document.getElementById("contact-button").addEventListener("click", function() {
-      console.log("Contact button clicked");
-      // You can display more information here or navigate to another page
-    });
-  }
-  
-  
+    // Add event listeners to the buttons
+  document.getElementById("about-button").addEventListener("click", function() {
+    console.log("About button clicked");
+    window.open(currentURL, '_blank'); // Opens a new window with the current URL
+  });
 
+  document.getElementById("projects-button").addEventListener("click", function() {
+    console.log("Projects button clicked");
+    window.open(currentURL, '_blank'); // Opens a new window with the current URL
+  });
+
+  document.getElementById("contact-button").addEventListener("click", function() {
+    console.log("Contact button clicked");
+    window.open(currentURL, '_blank'); // Opens a new window with the current URL
+  });
+}
+  
+  
+let hasFinishedWriting = false;
 
 function onMouseClick(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -311,37 +322,42 @@ W   W  EEEEE  LLLLL  CCCC  OOO  M   M EEEEE`;
 
         setTimeout(() => {
             writeToTerminal(terminal, firstMessage, 0);
+            let hasFinishedWriting = false;
         }, 1000);
         
         setTimeout(() => {
             terminal.textContent = ''; // Clear the terminal if you want to
             writeToTerminal(terminal, secondMessage, 0);
+            let hasFinishedWriting = false;
         }, 3000 + firstMessage.length * typeSpeed);
 
         setTimeout(() => {
             writeToTerminal(terminal, thirdMessage, 0);
+            let hasFinishedWriting = false;
         }, 5000 + (firstMessage.length + secondMessage.length) * typeSpeed);
 
         setTimeout(() => {
             writeToTerminal(terminal, fourthMessage, 0);
+            let hasFinishedWriting = false;
         }, 7000 + (firstMessage.length + secondMessage.length + thirdMessage.length) * typeSpeed);
 
         setTimeout(() => {
             writeToTerminalFaster(terminal, fifthMessage, 0);
+            let hasFinishedWriting = false;
         }, 10000 + (firstMessage.length + secondMessage.length + thirdMessage.length + fourthMessage.length) * typeSpeed);
 
         setTimeout(() => {
             terminal.textContent = ''; // Clear the terminal
+            let hasFinishedWriting = false;
             terminal.innerHTML = terminal.innerHTML = '<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; margin-top: -50px;"><span style="font-size: 80px; text-align: center;">BRYCE BENNETT</span><span style="font-size: 40px; text-align: center;">Graphic Designer</span></div>';
  
     }, 5000 + (firstMessage.length + secondMessage.length + thirdMessage.length + fourthMessage.length + fifthMessage.length) * typeSpeed);
 
     setTimeout(() => {
         insertButtonsIntoTerminal(terminal);
+        let hasFinishedWriting = false;
       }, 5000 + (firstMessage.length + secondMessage.length + thirdMessage.length + fourthMessage.length + fifthMessage.length) * typeSpeed);
-        
-        
-        
+      let hasFinishedWriting = true;
     }
 }
 
@@ -453,7 +469,7 @@ const stars = new THREE.Points(starsGeometry, starsMaterial);
 scene.add(stars);
 
 animate();
-
+controls.update();
 
 
 window.addEventListener('resize', () => {
